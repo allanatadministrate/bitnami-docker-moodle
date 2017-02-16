@@ -15,8 +15,12 @@ RUN bitnami-pkg install mysql-client-10.1.21-0 --checksum 8e868a3e46bfa59f3fb4e1
 RUN bitnami-pkg unpack php-7.1.1-1 --checksum cc64828e801996f2f84d48814d8f74687ffbb0bb15f078586b2bf0a50371c7a9
 RUN bitnami-pkg install libphp-7.1.1-0 --checksum 44dcbd3692c4de97638bb8830619f3dbb555e59686804393cd0f2c6038fdcd31
 
-# Install moodle
-RUN bitnami-pkg unpack moodle-3.2.1-0 --checksum eebfb4df5bf66921373405a606f95d51eff911fea2f4b55440256b6c5624f448
+ADD https://download.moodle.org/moodle/moodle-latest.tgz /var/www/moodle-latest.tgz
+RUN cd /var/www; tar zxvf moodle-latest.tgz; mv /var/www/moodle /var/www/html
+RUN chown -R www-data:www-data /var/www/html/moodle
+RUN mkdir /var/moodledata
+RUN chown -R www-data:www-data /var/moodledata; chmod 777 /var/moodledata
+RUN chmod 755 /start.sh /etc/apache2/foreground.sh
 
 COPY rootfs /
 
